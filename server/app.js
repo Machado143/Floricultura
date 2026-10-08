@@ -8,10 +8,13 @@ const apiRoutes = require('./routes');
 const { notFoundHandler, errorHandler } = require('./middlewares/errorMiddleware');
 
 const app = express();
+const allowedOrigin = process.env.FRONTEND_URL;
 
 app.disable('x-powered-by');
 app.use(helmet());
-app.use(cors());
+app.use(cors({
+  origin: allowedOrigin || false
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan('dev'));

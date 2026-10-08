@@ -12,5 +12,6 @@ module.exports = {
   nodeEnv: process.env.NODE_ENV || 'development',
   databaseUrl: process.env.DATABASE_URL,
   jwtSecret: process.env.JWT_SECRET,
+  frontendUrl: process.env.FRONTEND_URL || '',
   estoqueMinimo: Number(process.env.ESTOQUE_MINIMO || 5)
 };

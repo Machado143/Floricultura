@@ -3,7 +3,10 @@ const bcrypt = require('bcryptjs');
 const prisma = require('../config/prisma');
 
 async function main() {
-  const senha = await bcrypt.hash('Flor@1234', 10);
+  if (!process.env.ADMIN_PASSWORD || process.env.ADMIN_PASSWORD.length < 8) {
+    throw new Error('ADMIN_PASSWORD must be set and contain at least 8 characters');
+  }
+  const senha = await bcrypt.hash(process.env.ADMIN_PASSWORD, 10);
 
   await prisma.usuario.upsert({
     where: { email: 'admin@floricultura.com' },
@@ -11,7 +14,7 @@ async function main() {
     create: {
       nome: 'Administrador',
       email: 'admin@floricultura.com',
-      senha, // Senha padrão: Flor@1234
+      senha,
       ativo: true,
       role: 'ADMIN'
     }

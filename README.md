@@ -106,6 +106,8 @@ As pastas `client/components`, `client/hooks`, `server/models` e `server/migrati
    PORT=3000
    JWT_SECRET="sua_chave_secreta_aqui"
    ESTOQUE_MINIMO=5
+   FRONTEND_URL=
+   ADMIN_PASSWORD="defina-uma-senha-com-pelo-menos-8-caracteres"
    ```
    > Substitua `usuario` e `senha` pelas credenciais reais do seu PostgreSQL. Se estiverem incorretas, o Prisma retornará erro **P1000 (Authentication failed)**.
 
@@ -151,11 +153,29 @@ npm run prisma:generate
 ### Erro Prisma `P1000: Authentication failed`
 Revise o valor de `DATABASE_URL` no `.env` e valide usuário/senha/host/porta do PostgreSQL.
 
+### Seed e segurança
+
+O seed exige `ADMIN_PASSWORD` com pelo menos 8 caracteres e não possui uma senha
+padrão embutida no código:
+
+```bash
+ADMIN_PASSWORD="sua-senha-segura" npm run seed
+```
+
+O login aceita no máximo 10 tentativas por IP a cada 15 minutos. O CORS fica
+desabilitado por padrão, pois o frontend é servido pelo mesmo domínio; para um
+frontend hospedado separadamente, defina `FRONTEND_URL` com a origem permitida.
+
 ### Deploy na Vercel
 
 O projeto expõe o Express por meio de `api/index.js`; localmente, `npm run dev`
 continua iniciando o servidor HTTP na porta configurada. Na Vercel, configure estas
 variáveis no ambiente de produção:
+
+As páginas em `client/` são arquivos estáticos servidos diretamente pela Vercel.
+O `api/index.js` atende somente as requisições em `/api/*`; por isso, não deve
+haver um rewrite global de `/(.*)` para `/api`, pois ele captura as páginas do
+frontend e faz o Express responder `Recurso não encontrado`.
 
 - `DATABASE_URL`: conexão pooler usada pelas requisições.
 - `DIRECT_URL`: conexão direta usada pelo Prisma para migrações.
