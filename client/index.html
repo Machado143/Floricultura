@@ -1,128 +1,123 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Floricultura | Central do projeto</title>
-  <style>
-    :root {
-      color-scheme: light;
-      --background: #f7f8f4;
-      --card: #ffffff;
-      --ink: #233128;
-      --muted: #647168;
-      --primary: #2f6f4e;
-      --primary-dark: #205238;
-      --border: #dce5dc;
-    }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Floricultura | Central de vendas</title>
+    <style>
+      :root {
+        --ink: #24342a;
+        --muted: #6a786e;
+        --green: #2f6f4e;
+        --green-dark: #205238;
+        --cream: #fbfaf5;
+        --card: #fff;
+        --border: #dce6dc;
+        --shadow: 0 12px 32px rgb(35 49 40 / 8%);
+      }
 
-    * { box-sizing: border-box; }
+      * { box-sizing: border-box; }
 
-    body {
-      margin: 0;
-      min-height: 100vh;
-      background: linear-gradient(135deg, #f7f8f4, #eaf3e9);
-      color: var(--ink);
-      font: 16px/1.5 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        color: var(--ink);
+        background: linear-gradient(135deg, var(--cream), #eaf3e9);
+        font: 16px/1.5 "DM Sans", system-ui, sans-serif;
+      }
 
-    main {
-      width: min(980px, calc(100% - 32px));
-      margin: 0 auto;
-      padding: 64px 0;
-    }
+      main { width: min(1120px, calc(100% - 32px)); margin: auto; padding: 48px 0 56px; }
+      header { display: flex; align-items: end; justify-content: space-between; gap: 24px; }
+      .eyebrow { margin: 0; color: var(--green); font-size: .78rem; font-weight: 700; letter-spacing: .13em; text-transform: uppercase; }
+      h1 { margin: 8px 0; font-size: clamp(2.2rem, 5vw, 4rem); line-height: 1.02; }
+      .intro { max-width: 650px; margin: 0; color: var(--muted); font-size: 1.08rem; }
+      .login-link { color: var(--green-dark); font-weight: 700; text-decoration: none; white-space: nowrap; }
+      .login-link:hover, .login-link:focus-visible { text-decoration: underline; }
 
-    .eyebrow {
-      color: var(--primary);
-      font-size: .8rem;
-      font-weight: 700;
-      letter-spacing: .12em;
-      text-transform: uppercase;
-    }
+      .section-title { margin: 48px 0 16px; }
+      .section-title h2 { margin: 4px 0 0; font-size: 1.35rem; }
+      .links { display: grid; grid-template-columns: repeat(auto-fit, minmax(235px, 1fr)); gap: 16px; }
+      a.card { display: block; min-height: 168px; padding: 24px; border: 1px solid var(--border); border-radius: 18px; background: var(--card); color: inherit; text-decoration: none; box-shadow: var(--shadow); transition: .2s ease; }
+      a.card:hover, a.card:focus-visible { border-color: var(--green); outline: none; transform: translateY(-3px); box-shadow: 0 16px 34px rgb(35 49 40 / 14%); }
+      .icon { display: grid; width: 42px; height: 42px; place-items: center; border-radius: 12px; background: #e7f1e7; color: var(--green-dark); font-size: 1.35rem; }
+      h3 { margin: 16px 0 5px; font-size: 1.1rem; }
+      .card p { margin: 0; color: var(--muted); }
 
-    h1 {
-      margin: 8px 0 12px;
-      font-size: clamp(2rem, 5vw, 3.5rem);
-      line-height: 1.05;
-    }
+      .featured { display: grid; grid-template-columns: 1.4fr 1fr; gap: 16px; }
+      a.primary-card { color: #fff; background: var(--green); border-color: var(--green); }
+      a.primary-card .icon { background: rgb(255 255 255 / 18%); color: #fff; }
+      a.primary-card p { color: #e3f0e4; }
+      a.primary-card:hover, a.primary-card:focus-visible { border-color: var(--green-dark); background: var(--green-dark); }
 
-    .intro {
-      max-width: 620px;
-      color: var(--muted);
-      font-size: 1.1rem;
-    }
+      footer { margin-top: 48px; color: var(--muted); font-size: .9rem; }
+      @media (max-width: 700px) {
+        main { padding-top: 32px; }
+        header, .featured { display: block; }
+        .login-link { display: inline-block; margin-top: 18px; }
+        .featured .card + .card { margin-top: 16px; }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <div>
+          <p class="eyebrow">Floricultura ERP</p>
+          <h1>Central de vendas</h1>
+          <p class="intro">Tudo o que sua equipe precisa para atender clientes, fechar pedidos e acompanhar a operação da floricultura.</p>
+        </div>
+        <a class="login-link" href="/client/pages/login/index.html">Entrar ou trocar de usuário →</a>
+      </header>
 
-    .links {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 16px;
-      margin-top: 40px;
-    }
+      <section aria-labelledby="selling-title">
+        <div class="section-title">
+          <p class="eyebrow">Atendimento</p>
+          <h2 id="selling-title">Vender agora</h2>
+        </div>
+        <div class="featured">
+          <a class="card primary-card" href="/client/pages/pdv/index.html">
+            <div class="icon" aria-hidden="true">🛒</div>
+            <h3>Abrir o ponto de venda</h3>
+            <p>Monte o carrinho, aplique descontos, escolha o cliente e finalize a venda.</p>
+          </a>
+          <a class="card" href="/client/pages/clientes/index.html">
+            <div class="icon" aria-hidden="true">👥</div>
+            <h3>Cadastrar cliente</h3>
+            <p>Encontre ou registre os dados de quem está comprando.</p>
+          </a>
+        </div>
+      </section>
 
-    a {
-      display: block;
-      height: 100%;
-      padding: 24px;
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      background: var(--card);
-      color: inherit;
-      text-decoration: none;
-      box-shadow: 0 8px 24px rgb(35 49 40 / 7%);
-      transition: border-color .2s, box-shadow .2s, transform .2s;
-    }
+      <section aria-labelledby="operation-title">
+        <div class="section-title">
+          <p class="eyebrow">Operação</p>
+          <h2 id="operation-title">Acompanhar e preparar vendas</h2>
+        </div>
+        <div class="links">
+          <a class="card" href="/client/pages/dashboard/index.html">
+            <div class="icon" aria-hidden="true">📊</div>
+            <h3>Visão geral</h3>
+            <p>Veja faturamento, vendas do dia, perdas e alertas de estoque.</p>
+          </a>
+          <a class="card" href="/client/pages/produtos/index.html">
+            <div class="icon" aria-hidden="true">🌿</div>
+            <h3>Produtos e estoque</h3>
+            <p>Consulte preços, cadastre itens e acompanhe a disponibilidade.</p>
+          </a>
+          <a class="card" href="/client/pages/entregas/index.html">
+            <div class="icon" aria-hidden="true">🚚</div>
+            <h3>Entregas</h3>
+            <p>Agende pedidos e acompanhe o status de cada entrega.</p>
+          </a>
+          <a class="card" href="/client/pages/perdas/index.html">
+            <div class="icon" aria-hidden="true">📦</div>
+            <h3>Registrar perdas</h3>
+            <p>Dê baixa em produtos danificados, vencidos ou deteriorados.</p>
+          </a>
+        </div>
+      </section>
 
-    a:hover, a:focus-visible {
-      border-color: var(--primary);
-      box-shadow: 0 12px 28px rgb(35 49 40 / 14%);
-      outline: none;
-      transform: translateY(-2px);
-    }
-
-    .icon { font-size: 1.8rem; }
-    h2 { margin: 12px 0 6px; font-size: 1.15rem; }
-    p { margin: 0; color: var(--muted); }
-
-    footer {
-      margin-top: 44px;
-      color: var(--muted);
-      font-size: .9rem;
-    }
-  </style>
-</head>
-<body>
-  <main>
-    <div class="eyebrow">Floricultura ERP</div>
-    <h1>Central do projeto</h1>
-    <p class="intro">
-      Escolha uma área para acessar a aplicação, consultar a API ou verificar o
-      status do backend.
-    </p>
-
-    <section class="links" aria-label="Links do projeto">
-      <a href="/client/pages/login/index.html">
-        <div class="icon" aria-hidden="true">🌿</div>
-        <h2>Entrar no sistema</h2>
-        <p>Acesse o login e os módulos do ERP.</p>
-      </a>
-      <a href="/client/pages/pdv/index.html">
-        <div class="icon" aria-hidden="true">🛒</div>
-        <h2>Ponto de venda</h2>
-        <p>Abra diretamente o PDV da floricultura.</p>
-      </a>
-      <a href="/api/v1">
-        <div class="icon" aria-hidden="true">⚙️</div>
-        <h2>Backend / API</h2>
-        <p>Consulte o endpoint principal da API.</p>
-      </a>
-      <a href="/api/v1/health">
-        <div class="icon" aria-hidden="true">✅</div>
-        <h2>Status da API</h2>
-        <p>Verifique se o backend está online.</p>
-      </a>
-    </section>
-
-    <footer>Ambiente publicado com Express, Prisma e Vercel.</footer>
-  </main>
-</body>
+      <footer>Área comercial · Faça login para acessar os módulos protegidos.</footer>
+    </main>
+  </body>
 </html>
