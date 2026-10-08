@@ -3,5 +3,11 @@
     "api/index.js": {
       "includeFiles": "client/**"
     }
-  }
+  },
+  "rewrites": [
+    {
+      "source": "/",
+      "destination": "/client/index.html"
+    }
+  ]
 }

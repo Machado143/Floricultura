@@ -177,6 +177,9 @@ O `api/index.js` atende somente as requisições em `/api/*`; por isso, não dev
 haver um rewrite global de `/(.*)` para `/api`, pois ele captura as páginas do
 frontend e faz o Express responder `Recurso não encontrado`.
 
+A rota `/` abre a central do projeto em `client/index.html`, com atalhos para o
+login, o PDV, a API e o health check do backend.
+
 - `DATABASE_URL`: conexão pooler usada pelas requisições.
 - `DIRECT_URL`: conexão direta usada pelo Prisma para migrações.
 - `JWT_SECRET`: chave longa e privada usada para assinar os tokens.
