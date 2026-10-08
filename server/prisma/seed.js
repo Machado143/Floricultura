@@ -3,8 +3,8 @@ const bcrypt = require('bcryptjs');
 const prisma = require('../config/prisma');
 
 async function main() {
-  if (!process.env.ADMIN_PASSWORD || process.env.ADMIN_PASSWORD.length < 8) {
-    throw new Error('ADMIN_PASSWORD must be set and contain at least 8 characters');
+  if (!process.env.ADMIN_PASSWORD || process.env.ADMIN_PASSWORD.length < 4) {
+    throw new Error('ADMIN_PASSWORD must be set and contain at least 4 characters');
   }
   const senha = await bcrypt.hash(process.env.ADMIN_PASSWORD, 10);
 

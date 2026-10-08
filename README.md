@@ -107,7 +107,7 @@ As pastas `client/components`, `client/hooks`, `server/models` e `server/migrati
    JWT_SECRET="sua_chave_secreta_aqui"
    ESTOQUE_MINIMO=5
    FRONTEND_URL=
-   ADMIN_PASSWORD="defina-uma-senha-com-pelo-menos-8-caracteres"
+   ADMIN_PASSWORD="defina-uma-senha-com-pelo-menos-4-caracteres"
    ```
    > Substitua `usuario` e `senha` pelas credenciais reais do seu PostgreSQL. Se estiverem incorretas, o Prisma retornará erro **P1000 (Authentication failed)**.
 
@@ -155,7 +155,7 @@ Revise o valor de `DATABASE_URL` no `.env` e valide usuário/senha/host/porta do
 
 ### Seed e segurança
 
-O seed exige `ADMIN_PASSWORD` com pelo menos 8 caracteres e não possui uma senha
+O seed exige `ADMIN_PASSWORD` com pelo menos 4 caracteres e não possui uma senha
 padrão embutida no código:
 
 ```bash
