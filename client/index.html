@@ -3,121 +3,288 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#276247" />
     <title>Floricultura | Central de vendas</title>
     <style>
+      @import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Libre+Baskerville:wght@400;700&display=swap");
+
       :root {
-        --ink: #24342a;
-        --muted: #6a786e;
-        --green: #2f6f4e;
-        --green-dark: #205238;
-        --cream: #fbfaf5;
-        --card: #fff;
-        --border: #dce6dc;
-        --shadow: 0 12px 32px rgb(35 49 40 / 8%);
+        --ink: #203229;
+        --muted: #6b7b71;
+        --green: #276247;
+        --green-dark: #194833;
+        --green-soft: #e8f2e9;
+        --cream: #faf9f4;
+        --white: #fff;
+        --border: #dce7dd;
+        --shadow: 0 18px 44px rgb(35 61 45 / 9%);
+        --radius: 20px;
       }
 
       * { box-sizing: border-box; }
 
+      html { scroll-behavior: smooth; }
+
       body {
         margin: 0;
-        min-height: 100vh;
+        min-width: 320px;
         color: var(--ink);
-        background: linear-gradient(135deg, var(--cream), #eaf3e9);
+        background:
+          radial-gradient(circle at 90% 0%, #dceede 0, transparent 28rem),
+          linear-gradient(135deg, var(--cream), #edf5ed);
         font: 16px/1.5 "DM Sans", system-ui, sans-serif;
       }
 
-      main { width: min(1120px, calc(100% - 32px)); margin: auto; padding: 48px 0 56px; }
-      header { display: flex; align-items: end; justify-content: space-between; gap: 24px; }
-      .eyebrow { margin: 0; color: var(--green); font-size: .78rem; font-weight: 700; letter-spacing: .13em; text-transform: uppercase; }
-      h1 { margin: 8px 0; font-size: clamp(2.2rem, 5vw, 4rem); line-height: 1.02; }
-      .intro { max-width: 650px; margin: 0; color: var(--muted); font-size: 1.08rem; }
-      .login-link { color: var(--green-dark); font-weight: 700; text-decoration: none; white-space: nowrap; }
-      .login-link:hover, .login-link:focus-visible { text-decoration: underline; }
+      a { color: inherit; }
 
-      .section-title { margin: 48px 0 16px; }
-      .section-title h2 { margin: 4px 0 0; font-size: 1.35rem; }
-      .links { display: grid; grid-template-columns: repeat(auto-fit, minmax(235px, 1fr)); gap: 16px; }
-      a.card { display: block; min-height: 168px; padding: 24px; border: 1px solid var(--border); border-radius: 18px; background: var(--card); color: inherit; text-decoration: none; box-shadow: var(--shadow); transition: .2s ease; }
-      a.card:hover, a.card:focus-visible { border-color: var(--green); outline: none; transform: translateY(-3px); box-shadow: 0 16px 34px rgb(35 49 40 / 14%); }
-      .icon { display: grid; width: 42px; height: 42px; place-items: center; border-radius: 12px; background: #e7f1e7; color: var(--green-dark); font-size: 1.35rem; }
-      h3 { margin: 16px 0 5px; font-size: 1.1rem; }
-      .card p { margin: 0; color: var(--muted); }
+      .shell {
+        width: min(1160px, calc(100% - 40px));
+        margin: 0 auto;
+        padding: 26px 0 58px;
+      }
 
-      .featured { display: grid; grid-template-columns: 1.4fr 1fr; gap: 16px; }
-      a.primary-card { color: #fff; background: var(--green); border-color: var(--green); }
-      a.primary-card .icon { background: rgb(255 255 255 / 18%); color: #fff; }
-      a.primary-card p { color: #e3f0e4; }
-      a.primary-card:hover, a.primary-card:focus-visible { border-color: var(--green-dark); background: var(--green-dark); }
+      .topbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+      }
 
-      footer { margin-top: 48px; color: var(--muted); font-size: .9rem; }
-      @media (max-width: 700px) {
-        main { padding-top: 32px; }
-        header, .featured { display: block; }
-        .login-link { display: inline-block; margin-top: 18px; }
-        .featured .card + .card { margin-top: 16px; }
+      .brand {
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        color: var(--green-dark);
+        font-weight: 700;
+        text-decoration: none;
+      }
+
+      .brand-mark {
+        display: grid;
+        width: 42px;
+        height: 42px;
+        place-items: center;
+        border-radius: 14px;
+        color: #fff;
+        background: var(--green);
+        box-shadow: 0 8px 18px rgb(39 98 71 / 22%);
+        font-size: 1.3rem;
+      }
+
+      .topbar nav { display: flex; align-items: center; gap: 22px; }
+      .topbar nav a { color: var(--muted); font-size: .92rem; text-decoration: none; }
+      .topbar nav a:hover, .topbar nav a:focus-visible { color: var(--green-dark); text-decoration: underline; }
+      .login-link { color: var(--green-dark) !important; font-weight: 700; }
+
+      .hero {
+        display: grid;
+        grid-template-columns: minmax(0, 1.15fr) minmax(280px, .85fr);
+        align-items: center;
+        gap: 46px;
+        padding: 78px 0 56px;
+      }
+
+      .eyebrow {
+        margin: 0;
+        color: var(--green);
+        font-size: .76rem;
+        font-weight: 700;
+        letter-spacing: .14em;
+        text-transform: uppercase;
+      }
+
+      h1 {
+        max-width: 720px;
+        margin: 12px 0 18px;
+        font-family: "Libre Baskerville", Georgia, serif;
+        font-size: clamp(2.5rem, 6vw, 4.7rem);
+        line-height: 1.08;
+        letter-spacing: -.045em;
+      }
+
+      .hero-copy {
+        max-width: 620px;
+        margin: 0;
+        color: var(--muted);
+        font-size: clamp(1.05rem, 2vw, 1.2rem);
+      }
+
+      .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+      .button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 48px;
+        padding: 0 21px;
+        border: 1px solid transparent;
+        border-radius: 12px;
+        font-weight: 700;
+        text-decoration: none;
+        transition: .2s ease;
+      }
+      .button-primary { color: #fff; background: var(--green); box-shadow: 0 8px 18px rgb(39 98 71 / 20%); }
+      .button-secondary { color: var(--green-dark); border-color: var(--border); background: rgb(255 255 255 / 75%); }
+      .button:hover, .button:focus-visible { outline: none; transform: translateY(-2px); }
+      .button-primary:hover, .button-primary:focus-visible { background: var(--green-dark); }
+      .button-secondary:hover, .button-secondary:focus-visible { border-color: var(--green); background: #fff; }
+
+      .hero-art {
+        position: relative;
+        min-height: 270px;
+        overflow: hidden;
+        border-radius: 32px;
+        background: linear-gradient(145deg, #276247, #173f2d);
+        box-shadow: var(--shadow);
+      }
+      .hero-art::before, .hero-art::after {
+        position: absolute;
+        border: 1px solid rgb(255 255 255 / 16%);
+        border-radius: 50%;
+        content: "";
+      }
+      .hero-art::before { width: 300px; height: 300px; right: -70px; top: -90px; }
+      .hero-art::after { width: 230px; height: 230px; left: -80px; bottom: -100px; }
+      .art-content { position: absolute; inset: auto 28px 26px; color: #fff; }
+      .art-content strong { display: block; max-width: 260px; font-family: "Libre Baskerville", Georgia, serif; font-size: 1.55rem; line-height: 1.2; }
+      .art-content span { display: block; margin-top: 8px; color: #d9ebdc; }
+      .art-leaf { position: absolute; top: 36px; right: 52px; color: #b9d9bd; font-size: 5.2rem; transform: rotate(24deg); }
+
+      .section-heading { margin: 26px 0 18px; }
+      .section-heading h2 { margin: 5px 0 0; font-size: 1.45rem; letter-spacing: -.02em; }
+      .cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; }
+      .card {
+        display: flex;
+        min-height: 184px;
+        flex-direction: column;
+        padding: 22px;
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        background: rgb(255 255 255 / 88%);
+        text-decoration: none;
+        box-shadow: 0 8px 24px rgb(35 61 45 / 5%);
+        transition: .2s ease;
+      }
+      .card:hover, .card:focus-visible { border-color: var(--green); outline: none; transform: translateY(-3px); box-shadow: var(--shadow); }
+      .icon { display: grid; width: 42px; height: 42px; place-items: center; border-radius: 13px; color: var(--green-dark); background: var(--green-soft); font-size: 1.35rem; }
+      .card h3 { margin: 18px 0 5px; font-size: 1.05rem; }
+      .card p { margin: 0; color: var(--muted); font-size: .94rem; }
+      .card .arrow { margin-top: auto; padding-top: 16px; color: var(--green); font-weight: 700; font-size: .88rem; }
+
+      .workflow {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 14px;
+        margin-top: 48px;
+        padding: 24px;
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        background: rgb(255 255 255 / 62%);
+      }
+      .step { display: flex; gap: 12px; }
+      .step-number { display: grid; flex: 0 0 30px; height: 30px; place-items: center; border-radius: 50%; color: #fff; background: var(--green); font-weight: 700; }
+      .step strong { display: block; margin-bottom: 3px; font-size: .96rem; }
+      .step span { color: var(--muted); font-size: .88rem; }
+
+      footer { margin-top: 42px; color: var(--muted); font-size: .88rem; }
+
+      @media (max-width: 900px) {
+        .hero { grid-template-columns: 1fr; gap: 28px; padding-top: 58px; }
+        .hero-art { min-height: 220px; }
+        .cards { grid-template-columns: repeat(2, 1fr); }
+      }
+      @media (max-width: 620px) {
+        .shell { width: min(100% - 28px, 1160px); padding-top: 18px; }
+        .topbar nav a:not(.login-link) { display: none; }
+        .topbar nav { gap: 0; }
+        .hero { padding: 48px 0 38px; }
+        h1 { font-size: 2.6rem; }
+        .hero-actions, .button { width: 100%; }
+        .cards, .workflow { grid-template-columns: 1fr; }
+        .workflow { gap: 18px; }
       }
     </style>
   </head>
   <body>
-    <main>
-      <header>
-        <div>
-          <p class="eyebrow">Floricultura ERP</p>
-          <h1>Central de vendas</h1>
-          <p class="intro">Tudo o que sua equipe precisa para atender clientes, fechar pedidos e acompanhar a operação da floricultura.</p>
-        </div>
-        <a class="login-link" href="/client/pages/login/index.html">Entrar ou trocar de usuário →</a>
+    <div class="shell">
+      <header class="topbar">
+        <a class="brand" href="/" aria-label="Voltar para a central de vendas">
+          <span class="brand-mark" aria-hidden="true">✿</span>
+          <span>Floricultura</span>
+        </a>
+        <nav aria-label="Navegação principal">
+          <a href="#operacao">Operação</a>
+          <a class="login-link" href="/client/pages/login/index.html">Entrar na conta →</a>
+        </nav>
       </header>
 
-      <section aria-labelledby="selling-title">
-        <div class="section-title">
-          <p class="eyebrow">Atendimento</p>
-          <h2 id="selling-title">Vender agora</h2>
+      <section class="hero" aria-labelledby="page-title">
+        <div>
+          <p class="eyebrow">Central de vendas</p>
+          <h1>Venda com mais leveza e cuidado.</h1>
+          <p class="hero-copy">Acesse rapidamente as ferramentas para atender seus clientes, montar pedidos e manter a floricultura em movimento.</p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="/client/pages/pdv/index.html">Começar uma venda <span aria-hidden="true">&nbsp;→</span></a>
+            <a class="button button-secondary" href="/client/pages/dashboard/index.html">Ver visão geral</a>
+          </div>
         </div>
-        <div class="featured">
-          <a class="card primary-card" href="/client/pages/pdv/index.html">
-            <div class="icon" aria-hidden="true">🛒</div>
-            <h3>Abrir o ponto de venda</h3>
-            <p>Monte o carrinho, aplique descontos, escolha o cliente e finalize a venda.</p>
-          </a>
+        <div class="hero-art" aria-hidden="true">
+          <span class="art-leaf">🌿</span>
+          <div class="art-content">
+            <strong>Seu atendimento começa aqui.</strong>
+            <span>Escolha uma ação para continuar.</span>
+          </div>
+        </div>
+      </section>
+
+      <section id="operacao" aria-labelledby="operation-title">
+        <div class="section-heading">
+          <p class="eyebrow">Atalhos da equipe</p>
+          <h2 id="operation-title">O que você precisa fazer?</h2>
+        </div>
+        <div class="cards">
           <a class="card" href="/client/pages/clientes/index.html">
-            <div class="icon" aria-hidden="true">👥</div>
-            <h3>Cadastrar cliente</h3>
-            <p>Encontre ou registre os dados de quem está comprando.</p>
+            <span class="icon" aria-hidden="true">👥</span>
+            <h3>Clientes</h3>
+            <p>Cadastre e encontre contatos para personalizar o atendimento.</p>
+            <span class="arrow">Gerenciar clientes →</span>
+          </a>
+          <a class="card" href="/client/pages/produtos/index.html">
+            <span class="icon" aria-hidden="true">🌱</span>
+            <h3>Produtos e estoque</h3>
+            <p>Atualize o catálogo, preços e disponibilidade dos produtos.</p>
+            <span class="arrow">Abrir catálogo →</span>
+          </a>
+          <a class="card" href="/client/pages/entregas/index.html">
+            <span class="icon" aria-hidden="true">🚚</span>
+            <h3>Entregas</h3>
+            <p>Organize horários e acompanhe os pedidos que sairão.</p>
+            <span class="arrow">Ver entregas →</span>
+          </a>
+          <a class="card" href="/client/pages/perdas/index.html">
+            <span class="icon" aria-hidden="true">📦</span>
+            <h3>Registrar perdas</h3>
+            <p>Dê baixa em produtos danificados ou fora de condição.</p>
+            <span class="arrow">Registrar ocorrência →</span>
           </a>
         </div>
       </section>
 
-      <section aria-labelledby="operation-title">
-        <div class="section-title">
-          <p class="eyebrow">Operação</p>
-          <h2 id="operation-title">Acompanhar e preparar vendas</h2>
+      <section class="workflow" aria-label="Fluxo recomendado de venda">
+        <div class="step">
+          <span class="step-number">1</span>
+          <div><strong>Prepare</strong><span>Confira produtos e estoque.</span></div>
         </div>
-        <div class="links">
-          <a class="card" href="/client/pages/dashboard/index.html">
-            <div class="icon" aria-hidden="true">📊</div>
-            <h3>Visão geral</h3>
-            <p>Veja faturamento, vendas do dia, perdas e alertas de estoque.</p>
-          </a>
-          <a class="card" href="/client/pages/produtos/index.html">
-            <div class="icon" aria-hidden="true">🌿</div>
-            <h3>Produtos e estoque</h3>
-            <p>Consulte preços, cadastre itens e acompanhe a disponibilidade.</p>
-          </a>
-          <a class="card" href="/client/pages/entregas/index.html">
-            <div class="icon" aria-hidden="true">🚚</div>
-            <h3>Entregas</h3>
-            <p>Agende pedidos e acompanhe o status de cada entrega.</p>
-          </a>
-          <a class="card" href="/client/pages/perdas/index.html">
-            <div class="icon" aria-hidden="true">📦</div>
-            <h3>Registrar perdas</h3>
-            <p>Dê baixa em produtos danificados, vencidos ou deteriorados.</p>
-          </a>
+        <div class="step">
+          <span class="step-number">2</span>
+          <div><strong>Atenda</strong><span>Escolha cliente e monte o pedido.</span></div>
+        </div>
+        <div class="step">
+          <span class="step-number">3</span>
+          <div><strong>Conclua</strong><span>Receba e acompanhe a entrega.</span></div>
         </div>
       </section>
 
       <footer>Área comercial · Faça login para acessar os módulos protegidos.</footer>
-    </main>
+    </div>
   </body>
 </html>
