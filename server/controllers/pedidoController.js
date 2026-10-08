@@ -2,13 +2,13 @@ const pedidoService = require('../services/pedidoService');
 
 async function create(req, res, next) {
   try {
-    const { clienteId, items, desconto, troco, formaPagamento } = req.body;
+    const { clienteId, items, desconto, valorRecebido, formaPagamento } = req.body;
     const data = await pedidoService.create({
       usuarioId: req.user.id,
       clienteId,
       items,
       desconto,
-      troco,
+      valorRecebido,
       formaPagamento
     });
 
@@ -16,6 +16,9 @@ async function create(req, res, next) {
   } catch (error) {
     if (error instanceof pedidoService.PedidoValidationError) {
       return res.status(400).json({ success: false, error: error.message });
+    }
+    if (error.code === 'P2003') {
+      return res.status(400).json({ success: false, error: 'Cliente não encontrado.' });
     }
     return next(error);
   }

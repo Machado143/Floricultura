@@ -303,7 +303,7 @@
         items: cart.map((item) => ({ produtoId: item.id, quantidade: item.quantity })),
         desconto: discount,
         formaPagamento: paymentMethod.value,
-        troco: paymentMethod.value === 'DINHEIRO' ? Math.max(received - total, 0) : 0
+        valorRecebido: paymentMethod.value === 'DINHEIRO' ? received : null
       });
       cart = [];
       discount = 0;

@@ -56,14 +56,24 @@ function serializePedido(pedido) {
   };
 }
 
-async function create({ usuarioId, clienteId, items, desconto = 0, troco = 0, formaPagamento }) {
+function parseDecimal(value, message) {
+  try {
+    return new Prisma.Decimal(value);
+  } catch {
+    throw new PedidoValidationError(message);
+  }
+}
+
+async function create({ usuarioId, clienteId, items, desconto = 0, valorRecebido, formaPagamento }) {
   if (!Array.isArray(items) || items.length === 0) throw new PedidoValidationError('O pedido deve conter ao menos um item');
   if (!FORMAS_PAGAMENTO.includes(formaPagamento)) throw new PedidoValidationError('Forma de pagamento inválida');
 
-  const descontoDecimal = new Prisma.Decimal(desconto);
-  const trocoDecimal = new Prisma.Decimal(troco);
+  const descontoDecimal = parseDecimal(desconto, 'O desconto deve ser um valor válido');
   if (descontoDecimal.isNegative()) throw new PedidoValidationError('O desconto não pode ser negativo');
-  if (trocoDecimal.isNegative()) throw new PedidoValidationError('O troco não pode ser negativo');
+  const receivedDecimal = valorRecebido === undefined || valorRecebido === null
+    ? null
+    : parseDecimal(valorRecebido, 'O valor recebido deve ser um valor válido');
+  if (receivedDecimal?.isNegative()) throw new PedidoValidationError('O valor recebido não pode ser negativo');
 
   const normalizedItems = normalizeItems(items);
 
@@ -95,6 +105,16 @@ async function create({ usuarioId, clienteId, items, desconto = 0, troco = 0, fo
 
     if (descontoDecimal.greaterThan(total)) throw new PedidoValidationError('O desconto não pode ser maior que o subtotal');
     const valorTotal = total.sub(descontoDecimal);
+    const recebido = receivedDecimal || valorTotal;
+    if (formaPagamento === 'DINHEIRO' && recebido.lessThan(valorTotal)) {
+      throw new PedidoValidationError('O valor recebido não pode ser menor que o total');
+    }
+    const trocoDecimal = formaPagamento === 'DINHEIRO' ? recebido.sub(valorTotal) : new Prisma.Decimal(0);
+
+    if (clienteId) {
+      const cliente = await tx.cliente.findUnique({ where: { id: clienteId }, select: { id: true } });
+      if (!cliente) throw new PedidoValidationError('Cliente não encontrado');
+    }
 
     for (const item of normalizedItems) {
       await tx.produto.update({ where: { id: item.produtoId }, data: { quantidadeEstoque: { decrement: item.quantidade } } });

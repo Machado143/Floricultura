@@ -28,8 +28,8 @@ async function create(req, res, next) {
   try {
     const { nome, email, senha, role } = req.body;
 
-    if (!nome || !isValidEmail(email) || !senha) {
-      return res.status(400).json({ success: false, error: 'Nome, e-mail válido e senha são obrigatórios' });
+    if (typeof nome !== 'string' || !nome.trim() || !isValidEmail(email) || typeof senha !== 'string' || senha.length < 8) {
+      return res.status(400).json({ success: false, error: 'Nome, e-mail válido e senha com pelo menos 8 caracteres são obrigatórios' });
     }
     if (!usuarioService.isValidRole(role)) {
       return res.status(400).json({ success: false, error: 'Perfil de usuário inválido' });
@@ -51,8 +51,11 @@ async function update(req, res, next) {
     if (role !== undefined && !usuarioService.isValidRole(role)) {
       return res.status(400).json({ success: false, error: 'Perfil de usuário inválido' });
     }
-    if (nome !== undefined && !nome.trim()) {
+    if (nome !== undefined && (typeof nome !== 'string' || !nome.trim())) {
       return res.status(400).json({ success: false, error: 'Nome não pode ficar vazio' });
+    }
+    if (senha !== undefined && (typeof senha !== 'string' || senha.length < 8)) {
+      return res.status(400).json({ success: false, error: 'A senha deve ter pelo menos 8 caracteres' });
     }
 
     return res.status(200).json({

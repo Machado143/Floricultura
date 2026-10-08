@@ -26,9 +26,11 @@ async function agendarEntrega(req, res, next) {
     const { clienteId, pedidoId, dataEntrega, horarioEntrega, endereco, observacao } = req.body;
     const normalizedAddress = typeof endereco === 'string' ? endereco.trim() : '';
     const normalizedTime = typeof horarioEntrega === 'string' ? horarioEntrega.trim() : '';
-    const scheduledDate = dataEntrega ? new Date(`${dataEntrega}T00:00:00`) : null;
+    const scheduledDate = /^\d{4}-\d{2}-\d{2}$/.test(dataEntrega || '')
+      ? new Date(`${dataEntrega}T12:00:00Z`)
+      : null;
 
-    if (!clienteId || !dataEntrega || !normalizedTime || !normalizedAddress || !scheduledDate || Number.isNaN(scheduledDate.getTime())) {
+    if (!clienteId || !dataEntrega || !/^([01]\d|2[0-3]):[0-5]\d$/.test(normalizedTime) || !normalizedAddress || !scheduledDate || Number.isNaN(scheduledDate.getTime())) {
       return res.status(400).json({ success: false, error: 'RN03: Cliente, endereço, data e horário são obrigatórios e válidos.' });
     }
 
@@ -43,7 +45,14 @@ async function agendarEntrega(req, res, next) {
     }
 
     const entrega = await prisma.entrega.create({
-      data: { clienteId, pedidoId: pedidoId || null, dataEntrega: scheduledDate, horarioEntrega: normalizedTime, endereco: normalizedAddress, observacao: observacao?.trim() || null },
+      data: {
+        clienteId,
+        pedidoId: pedidoId || null,
+        dataEntrega: scheduledDate,
+        horarioEntrega: normalizedTime,
+        endereco: normalizedAddress,
+        observacao: typeof observacao === 'string' ? observacao.trim() || null : null
+      },
       include: { cliente: true, pedido: true }
     });
     return res.status(201).json({ success: true, data: entrega });

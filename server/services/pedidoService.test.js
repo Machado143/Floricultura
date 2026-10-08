@@ -13,6 +13,39 @@ test('serialização de pedido não expõe senha em nenhum nível', () => {
     usuario: { id: 'u1', nome: 'Admin', senha: 'hash-secreto' },
     itens: [{ precoUnitario: '10.00', subtotal: '10.00', produto: { nome: 'Rosa', senha: 'não deveria existir' } }]
   });
+
+  test('rejeita desconto inválido antes de iniciar a transação', async () => {
+    await assert.rejects(
+      () => pedidoService.create({
+        usuarioId: 'usuario-1',
+        items: [{ produtoId: 'produto-1', quantidade: 1 }],
+        desconto: 'abc',
+        formaPagamento: 'PIX'
+      }),
+      (error) => error instanceof pedidoService.PedidoValidationError && error.message === 'O desconto deve ser um valor válido'
+    );
+  });
+
+  test('rejeita valor recebido menor que o total', async () => {
+    const originalTransaction = prisma.$transaction;
+    prisma.$transaction = async (callback) => callback({
+      async $queryRaw() {
+        return [{ id: 'produto-1', nome: 'Rosa', precoVenda: '10.00', quantidadeEstoque: 5, ativo: true }];
+      }
+    });
+
+    await assert.rejects(
+      () => pedidoService.create({
+        usuarioId: 'usuario-1',
+        items: [{ produtoId: 'produto-1', quantidade: 1 }],
+        valorRecebido: '9.99',
+        formaPagamento: 'DINHEIRO'
+      }),
+      (error) => error instanceof pedidoService.PedidoValidationError && error.message === 'O valor recebido não pode ser menor que o total'
+    );
+
+    prisma.$transaction = originalTransaction;
+  });
   const serializedText = JSON.stringify(serialized);
   assert.doesNotMatch(serializedText, /senha/);
 });

@@ -1,18 +1,20 @@
 const prisma = require('../config/prisma');
 const env = require('../config/env');
 
+const BRT_OFFSET_MS = 3 * 60 * 60 * 1000;
+
 const PAYMENT_METHODS = ['DINHEIRO', 'PIX', 'CARTAO_CREDITO', 'CARTAO_DEBITO'];
 
 function startOfToday() {
-  const date = new Date();
-  date.setHours(0, 0, 0, 0);
-  return date;
+  const local = new Date(Date.now() - BRT_OFFSET_MS);
+  local.setUTCHours(0, 0, 0, 0);
+  return new Date(local.getTime() + BRT_OFFSET_MS);
 }
 
 function startOfMonth() {
-  const date = startOfToday();
-  date.setDate(1);
-  return date;
+  const local = new Date(startOfToday().getTime() - BRT_OFFSET_MS);
+  local.setUTCDate(1);
+  return new Date(local.getTime() + BRT_OFFSET_MS);
 }
 
 function serializeMoney(value) {
@@ -78,4 +80,4 @@ async function getSalesByPayment() {
   });
 }
 
-module.exports = { classifyStock, getKpis, getSalesByPayment };
+module.exports = { classifyStock, getKpis, getSalesByPayment, startOfToday, startOfMonth };
