@@ -6,6 +6,7 @@ function notFoundHandler(req, res) {
 }
 
 function errorHandler(err, req, res, next) {
+  console.error('ERRO:', err);
   const statusCode = Number.isInteger(err.statusCode) ? err.statusCode : 500;
   const message = statusCode < 500 && err.message ? err.message : 'Falha inesperada no servidor';
 

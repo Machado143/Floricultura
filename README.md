@@ -151,6 +151,27 @@ npm run prisma:generate
 ### Erro Prisma `P1000: Authentication failed`
 Revise o valor de `DATABASE_URL` no `.env` e valide usuário/senha/host/porta do PostgreSQL.
 
+### Deploy na Vercel
+
+O projeto expõe o Express por meio de `api/index.js`; localmente, `npm run dev`
+continua iniciando o servidor HTTP na porta configurada. Na Vercel, configure estas
+variáveis no ambiente de produção:
+
+- `DATABASE_URL`: conexão pooler usada pelas requisições.
+- `DIRECT_URL`: conexão direta usada pelo Prisma para migrações.
+- `JWT_SECRET`: chave longa e privada usada para assinar os tokens.
+
+Depois de configurar as variáveis, faça um novo deploy. As tabelas do banco de
+produção devem ser criadas separadamente, a partir de uma máquina com as mesmas
+variáveis configuradas:
+
+```bash
+npm run migrate:deploy
+npm run seed
+```
+
+Não use `migrate:dev` contra o banco de produção.
+
 ---
 
 ## 📅 Histórico de Entregas por Sprints

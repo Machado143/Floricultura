@@ -7,6 +7,7 @@
   "scripts": {
     "dev": "node server/server.js",
     "start": "node server/server.js",
+    "postinstall": "prisma generate",
     "build": "prisma generate --schema server/prisma/schema.prisma",
     "prisma:generate": "prisma generate --schema server/prisma/schema.prisma",
     "migrate:dev": "prisma migrate dev --schema server/prisma/schema.prisma",
@@ -25,6 +26,7 @@
     "morgan": "^1.10.0"
   },
   "prisma": {
+    "schema": "server/prisma/schema.prisma",
     "seed": "node server/prisma/seed.js"
   },
   "devDependencies": {
