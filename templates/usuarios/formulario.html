@@ -1,0 +1,43 @@
+{% extends 'base_interno.html' %}
+
+{% block title %}{% if usuario %}Editar usuário{% else %}Novo usuário{% endif %}{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>{% if usuario %}Editar usuário{% else %}Novo usuário{% endif %}</h2>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-grid">
+            <div class="field">
+                <label>Usuário</label>
+                <input type="text" name="username" value="{{ usuario.username|default:'' }}" required />
+            </div>
+            <div class="field">
+                <label>E-mail</label>
+                <input type="email" name="email" value="{{ usuario.email|default:'' }}" />
+            </div>
+            <div class="field">
+                <label>Papel</label>
+                <select name="papel">
+                    <option value="ADMIN" {% if usuario and usuario.perfil.papel == 'ADMIN' %}selected{% endif %}>ADMIN</option>
+                    <option value="GERENTE" {% if usuario and usuario.perfil.papel == 'GERENTE' %}selected{% endif %}>GERENTE</option>
+                    <option value="CAIXA" {% if usuario and usuario.perfil.papel == 'CAIXA' %}selected{% endif %}>CAIXA</option>
+                    <option value="ENTREGADOR" {% if usuario and usuario.perfil.papel == 'ENTREGADOR' %}selected{% endif %}>ENTREGADOR</option>
+                </select>
+            </div>
+            {% if not usuario %}
+            <div class="field">
+                <label>Senha</label>
+                <input type="password" name="password" required />
+            </div>
+            {% else %}
+            <div class="field">
+                <label>Ativo</label>
+                <input type="checkbox" name="is_active" {% if usuario.is_active %}checked{% endif %} />
+            </div>
+            {% endif %}
+        </div>
+        <button type="submit" class="btn btn-primary" style="margin-top:1rem;">Salvar</button>
+    </form>
+</div>
+{% endblock %}

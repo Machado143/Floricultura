@@ -1,13 +1,12 @@
 {
-  "functions": {
-    "api/index.js": {
-      "includeFiles": "client/**"
-    }
-  },
-  "rewrites": [
+  "builds": [
     {
-      "source": "/",
-      "destination": "/client/index.html"
+      "src": "floricultura/wsgi.py",
+      "use": "@vercel/python",
+      "config": { "maxLambdaSize": "15mb" }
     }
+  ],
+  "routes": [
+    { "src": "/(.*)", "dest": "floricultura/wsgi.py" }
   ]
 }

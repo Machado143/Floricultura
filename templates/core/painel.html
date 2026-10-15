@@ -1,0 +1,34 @@
+{% extends 'base_interno.html' %}
+
+{% block title %}Painel{% endblock %}
+
+{% block content %}
+<h2>Painel</h2>
+<div class="stats-grid">
+    <div class="stat-box">
+        <strong>Vendas hoje</strong>
+        <div>{{ vendas_hoje }}</div>
+    </div>
+    <div class="stat-box">
+        <strong>Pedidos hoje</strong>
+        <div>{{ pedidos_hoje }}</div>
+    </div>
+    <div class="stat-box">
+        <strong>Entregas pendentes</strong>
+        <div>{{ entregas_pendentes }}</div>
+    </div>
+    <div class="stat-box">
+        <strong>Estoque baixo</strong>
+        <div>{{ estoque_baixo }}</div>
+    </div>
+</div>
+
+<div style="margin-top: 2rem; display:grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 1rem;">
+    <a href="/vendas/pdv/" class="card">Nova venda</a>
+    <a href="/plantas/" class="card">Catálogo</a>
+    <a href="/clientes/" class="card">Clientes</a>
+    <a href="/entregas/" class="card">Entregas de hoje</a>
+    <a href="/estoque/perdas/novo/" class="card">Registrar perda</a>
+    <a href="/estoque/alertas/" class="card">Alertas de estoque</a>
+</div>
+{% endblock %}

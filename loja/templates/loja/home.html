@@ -1,0 +1,96 @@
+{% extends 'loja/base.html' %}
+
+{% block title %}Flor & Cia Floricultura | Home{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div class="container hero-inner">
+        <div class="hero-copy">
+            <span class="eyebrow">Entrega rápida • flores frescas</span>
+            <h1>Flores que deixam cada momento mais bonito.</h1>
+            <p>Crie memórias com buquês encantadores, arranjos sofisticados e presentes florais para celebrar o que importa.</p>
+            <div class="hero-actions">
+                <a class="btn btn-primary" href="/catalogo/">Ver catálogo</a>
+                <a class="btn btn-secondary" href="/contato/">Falar conosco</a>
+            </div>
+        </div>
+        <div class="hero-visual" aria-label="Flores frescas da Flor & Cia">
+            <div class="hero-card main-card">
+                <img src="https://images.unsplash.com/photo-1525310072745-f49212b5ac6d?auto=format&fit=crop&w=900&q=80" alt="Buquê de flores" onerror="this.onerror=null;this.src='data:image/svg+xml;charset=UTF-8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 640 480%22%3E%3Crect width=%22640%22 height=%22480%22 fill=%22%23f8d7e0%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-size=%2248%22%3E%F0%9F%8C%B8%3C/text%3E%3C/svg%3E';" />
+            </div>
+            <div class="hero-badge badge-one">Entrega em 2h</div>
+            <div class="hero-badge badge-two">Sabor da estação</div>
+        </div>
+    </div>
+</section>
+
+<section class="products-section">
+    <div class="container">
+        <div class="section-head">
+            <span class="eyebrow">Destaques da semana</span>
+            <h2>Os mais pedidos</h2>
+        </div>
+        <div class="product-grid">
+            {% for produto in produtos_destaque %}
+            <article class="product-card">
+                <a href="/produto/{{ produto.id }}/" class="product-image-link">
+                    <img src="{{ produto.imagem }}" alt="{{ produto.nome }}" onerror="this.onerror=null;this.src='data:image/svg+xml;charset=UTF-8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 640 480%22%3E%3Crect width=%22640%22 height=%22480%22 fill=%22%23f8d7e0%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-size=%2248%22%3E%F0%9F%8C%B8%3C/text%3E%3C/svg%3E';" />
+                </a>
+                <div class="product-body">
+                    <span class="product-category">{{ produto.categoria }}</span>
+                    <h3>{{ produto.nome }}</h3>
+                    <div class="product-meta">
+                        <strong>R$ {{ produto.preco|floatformat:2 }} </strong>
+                        <a href="/produto/{{ produto.id }}/" class="text-link">Ver mais</a>
+                    </div>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<section class="categories-section">
+    <div class="container">
+        <div class="section-head">
+            <span class="eyebrow">Explore por estilo</span>
+            <h2>Encontre o presente ideal</h2>
+        </div>
+        <div class="category-grid">
+            {% for categoria in categorias %}
+            <a href="/catalogo/?categoria={{ categoria.slug }}" class="category-card">
+                <div class="category-icon">🌸</div>
+                <h3>{{ categoria.nome }}</h3>
+                <span>Ver produtos</span>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<section class="benefits-section">
+    <div class="container">
+        <div class="section-head center">
+            <span class="eyebrow">Por que escolher a gente</span>
+            <h2>Qualidade, cuidado e atenção</h2>
+        </div>
+        <div class="benefits-grid">
+            <article class="benefit-item">
+                <div class="benefit-icon">🚚</div>
+                <h3>Entrega no mesmo dia</h3>
+                <p>Atendimento ágil para presentear sem esperar.</p>
+            </article>
+            <article class="benefit-item">
+                <div class="benefit-icon">🌼</div>
+                <h3>Flores frescas</h3>
+                <p>Selecionamos flores recém-colhidas com beleza e durabilidade.</p>
+            </article>
+            <article class="benefit-item">
+                <div class="benefit-icon">🎁</div>
+                <h3>Cartão personalizado</h3>
+                <p>Mensagem especial em todas as entregas e presentes.</p>
+            </article>
+        </div>
+    </div>
+</section>
+{% endblock %}

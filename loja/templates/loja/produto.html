@@ -1,0 +1,31 @@
+{% extends 'loja/base.html' %}
+
+{% block title %}{{ produto.nome }} | Flor & Cia Floricultura{% endblock %}
+
+{% block content %}
+<section class="page-hero small-hero">
+    <div class="container narrow text-center">
+        <span class="eyebrow">Produto</span>
+        <h1>{{ produto.nome }}</h1>
+    </div>
+</section>
+
+<section class="product-detail">
+    <div class="container product-detail-grid">
+        <div class="product-detail-media">
+            <img src="{{ produto.imagem }}" alt="{{ produto.nome }}" onerror="this.onerror=null;this.src='data:image/svg+xml;charset=UTF-8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 640 480%22%3E%3Crect width=%22640%22 height=%22480%22 fill=%22%23f8d7e0%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-size=%2248%22%3E%F0%9F%8C%B8%3C/text%3E%3C/svg%3E';" />
+        </div>
+
+        <div class="product-detail-info">
+            <span class="product-category">{{ produto.categoria }}</span>
+            <h2>{{ produto.nome }}</h2>
+            <p class="product-price">R$ {{ produto.preco|floatformat:2 }}</p>
+            <p>{{ produto.descricao }}</p>
+            <div class="detail-actions">
+                <a class="btn btn-primary" href="{{ produto_whatsapp }}" target="_blank" rel="noreferrer">Pedir pelo WhatsApp</a>
+                <a class="btn btn-secondary" href="/catalogo/">Voltar ao catálogo</a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

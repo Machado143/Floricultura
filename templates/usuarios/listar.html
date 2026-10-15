@@ -1,0 +1,28 @@
+{% extends 'base_interno.html' %}
+
+{% block title %}Usuários{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>Usuários</h2>
+    <a href="/usuarios/novo/" class="btn btn-primary">Novo usuário</a>
+    <div class="table-wrap" style="margin-top:1rem;">
+        <table>
+            <thead><tr><th>Nome</th><th>Papel</th><th>Status</th><th>Ações</th></tr></thead>
+            <tbody>
+                {% for usuario in usuarios %}
+                <tr>
+                    <td>{{ usuario.get_full_name|default:usuario.username }}</td>
+                    <td>{{ usuario.perfil.papel }}</td>
+                    <td>{{ usuario.is_active|yesno:'Ativo,Inativo' }}</td>
+                    <td>
+                        <a href="/usuarios/{{ usuario.id }}/editar/">Editar</a>
+                        <a href="/usuarios/{{ usuario.id }}/toggle/">Trocar status</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

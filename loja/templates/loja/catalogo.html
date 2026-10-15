@@ -1,0 +1,63 @@
+{% extends 'loja/base.html' %}
+
+{% block title %}Catálogo | Flor & Cia Floricultura{% endblock %}
+
+{% block content %}
+<section class="page-hero small-hero">
+    <div class="container narrow text-center">
+        <span class="eyebrow">Catálogo</span>
+        <h1>Encontre a flor certa para cada momento</h1>
+    </div>
+</section>
+
+<section class="catalog-section">
+    <div class="container">
+        <form class="catalog-toolbar" method="get" action="/catalogo/">
+            <div class="filter-group">
+                <label for="categoria">Categoria</label>
+                <select id="categoria" name="categoria" onchange="this.form.submit()">
+                    <option value="">Todas</option>
+                    {% for categoria in categorias %}
+                    <option value="{{ categoria.slug }}" {% if categoria.slug == categoria_atual %}selected{% endif %}>{{ categoria.nome }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="search-group">
+                <label for="q">Buscar</label>
+                <input id="q" type="search" name="q" value="{{ busca }}" placeholder="Buscar por nome" />
+            </div>
+
+            <button type="submit" class="btn btn-primary">Filtrar</button>
+        </form>
+
+        <div class="catalog-results">
+            {% if produtos %}
+            <div class="product-grid">
+                {% for produto in produtos %}
+                <article class="product-card">
+                    <a href="/produto/{{ produto.id }}/" class="product-image-link">
+                        <img src="{{ produto.imagem }}" alt="{{ produto.nome }}" onerror="this.onerror=null;this.src='data:image/svg+xml;charset=UTF-8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 640 480%22%3E%3Crect width=%22640%22 height=%22480%22 fill=%22%23f8d7e0%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-size=%2248%22%3E%F0%9F%8C%B8%3C/text%3E%3C/svg%3E';" />
+                    </a>
+                    <div class="product-body">
+                        <span class="product-category">{{ produto.categoria }}</span>
+                        <h3>{{ produto.nome }}</h3>
+                        <div class="product-meta">
+                            <strong>R$ {{ produto.preco|floatformat:2 }}</strong>
+                            <a href="/produto/{{ produto.id }}/" class="text-link">Detalhes</a>
+                        </div>
+                    </div>
+                </article>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="empty-state">
+                <h3>Nenhum produto encontrado</h3>
+                <p>Tente outro termo de busca ou uma categoria diferente.</p>
+                <a class="btn btn-primary" href="/catalogo/">Limpar filtros</a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endblock %}

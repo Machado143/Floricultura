@@ -1,0 +1,80 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Flor & Cia Floricultura: buquês, arranjos, plantas e presentes florais com entrega rápida." />
+    <meta name="theme-color" content="#6d4cc5" />
+    <title>{% block title %}Flor & Cia Floricultura{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="{% static 'loja/css/style.css' %}" />
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+    <a class="whatsapp-float" href="https://wa.me/5511999999999?text=Ol%C3%A1%2C%20quero%20fazer%20um%20pedido%20na%20Flor%20%26%20Cia%20Floricultura" target="_blank" rel="noreferrer" aria-label="Falar pelo WhatsApp">WhatsApp</a>
+
+    <header class="site-header">
+        <div class="container nav-wrap">
+            <a href="/" class="brand" aria-label="Ir para a página inicial">
+                <span class="brand-mark">F</span>
+                <div>
+                    <strong>Flor & Cia</strong>
+                    <small>Floricultura</small>
+                </div>
+            </a>
+
+            <button class="menu-toggle" type="button" aria-label="Abrir menu" aria-expanded="false">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
+            <nav class="main-nav" aria-label="Menu principal">
+                <a href="/">Início</a>
+                <a href="/catalogo/">Catálogo</a>
+                <a href="/sobre/">Sobre</a>
+                <a href="/contato/">Contato</a>
+                <a class="btn btn-primary nav-cta" href="/catalogo/">Comprar agora</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="site-footer">
+        <div class="container footer-grid">
+            <div>
+                <h3>Flor & Cia Floricultura</h3>
+                <p>Flores frescas, presentes especiais e arranjos lindos para celebrar cada emoção.</p>
+            </div>
+            <div>
+                <h4>Atendimento</h4>
+                <ul>
+                    <li><a href="tel:+5511999999999">(11) 99999-9999</a></li>
+                    <li><a href="mailto:contato@florenciacia.com.br">contato@florenciacia.com.br</a></li>
+                    <li>Segunda a sábado, 8h às 18h</li>
+                </ul>
+            </div>
+            <div>
+                <h4>Explore</h4>
+                <ul>
+                    <li><a href="/catalogo/">Catálogo</a></li>
+                    <li><a href="/sobre/">Nossa história</a></li>
+                    <li><a href="/contato/">Contato</a></li>
+                    <li><a href="/login/">Área da loja</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="container footer-bottom">
+            <p>© 2026 Flor & Cia Floricultura. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="{% static 'loja/js/main.js' %}"></script>
+</body>
+</html>

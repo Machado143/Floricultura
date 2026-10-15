@@ -1,0 +1,21 @@
+{% extends 'base_interno.html' %}
+
+{% block title %}Busca global{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>Busca global: {{ termo|default:'-' }}</h2>
+    <h3>Plantas</h3>
+    <ul>
+        {% for item in resultados.plantas %}
+        <li><a href="/plantas/{{ item.id }}/">{{ item.nome_popular }}</a></li>
+        {% empty %}<li>Nenhum resultado.</li>{% endfor %}
+    </ul>
+    <h3>Clientes</h3>
+    <ul>
+        {% for item in resultados.clientes %}
+        <li>{{ item.nome }}</li>
+        {% empty %}<li>Nenhum resultado.</li>{% endfor %}
+    </ul>
+</div>
+{% endblock %}
