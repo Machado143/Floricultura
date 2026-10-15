@@ -1,5 +1,31 @@
 const pedidoService = require('../services/pedidoService');
 
+const STATUS_PEDIDO = ['CONCLUIDO', 'CANCELADO'];
+
+async function list(req, res, next) {
+  try {
+    const page = Math.max(Number.parseInt(req.query.page, 10) || 1, 1);
+    const pageSize = Math.min(Math.max(Number.parseInt(req.query.pageSize, 10) || 10, 1), 50);
+    const { status, userId } = req.query;
+
+    if (status && !STATUS_PEDIDO.includes(status)) {
+      return res.status(400).json({ success: false, error: 'Status de pedido inválido' });
+    }
+
+    return res.status(200).json({
+      success: true,
+      data: await pedidoService.list({
+        page,
+        pageSize,
+        status,
+        userId: req.user.role === 'VENDEDOR' ? req.user.id : userId
+      })
+    });
+  } catch (error) {
+    return next(error);
+  }
+}
+
 async function create(req, res, next) {
   try {
     const { clienteId, items, desconto, valorRecebido, formaPagamento } = req.body;
@@ -35,4 +61,4 @@ async function cancel(req, res, next) {
   }
 }
 
-module.exports = { create, cancel };
+module.exports = { list, create, cancel };

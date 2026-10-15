@@ -43,6 +43,7 @@ function serializePedido(pedido) {
   const safePedido = removeSensitiveFields(pedido);
   return {
     ...safePedido,
+    createdAt: safePedido.createdAt instanceof Date ? safePedido.createdAt.toISOString() : safePedido.createdAt,
     valorTotal: safePedido.valorTotal.toString(),
     desconto: safePedido.desconto.toString(),
     troco: safePedido.troco.toString(),
@@ -53,6 +54,37 @@ function serializePedido(pedido) {
       subtotal: item.subtotal.toString(),
       produto: item.produto
     }))
+  };
+}
+
+async function list({ page, pageSize, status, userId }) {
+  const where = {};
+  if (status) where.status = status;
+  if (userId) where.usuarioId = userId;
+
+  const [items, total] = await prisma.$transaction([
+    prisma.pedido.findMany({
+      where,
+      orderBy: { createdAt: 'desc' },
+      skip: (page - 1) * pageSize,
+      take: pageSize,
+      include: {
+        itens: { include: { produto: true } },
+        cliente: true,
+        usuario: { select: { id: true, nome: true } }
+      }
+    }),
+    prisma.pedido.count({ where })
+  ]);
+
+  return {
+    items: items.map(serializePedido),
+    pagination: {
+      page,
+      pageSize,
+      total,
+      totalPages: Math.ceil(total / pageSize)
+    }
   };
 }
 
@@ -177,4 +209,4 @@ async function cancel(id) {
   return serializePedido(pedido);
 }
 
-module.exports = { FORMAS_PAGAMENTO, PedidoValidationError, PedidoNotFoundError, serializePedido, create, cancel };
+module.exports = { FORMAS_PAGAMENTO, PedidoValidationError, PedidoNotFoundError, serializePedido, create, cancel, list };

@@ -176,6 +176,9 @@
 
   function exibirComprovante(pedido) {
     pedidoAtualComprovante = pedido;
+    const botanicalItems = (pedido.itens || [])
+      .map((item) => item.produto)
+      .filter((produto) => produto && [produto.rega, produto.iluminacao, produto.cuidados, produto.usos].some(Boolean));
     document.querySelector('#reciboId').textContent = pedido.id;
     document.querySelector('#reciboData').textContent = new Date(pedido.createdAt).toLocaleString('pt-BR');
     document.querySelector('#reciboAtendente').textContent = pedido.usuario?.nome || 'Atendente';
@@ -185,7 +188,7 @@
     document.querySelector('#reciboFormaPgto').textContent = pedido.formaPagamento;
     document.querySelector('#reciboTotal').textContent = currency(Number(pedido.valorTotal || 0));
     document.querySelector('#reciboTroco').textContent = currency(Number(pedido.troco || 0));
-    whatsappButton.hidden = !pedido.cliente?.telefone;
+    whatsappButton.hidden = !pedido.cliente?.telefone || botanicalItems.length === 0;
     receiptModal.hidden = false;
   }
 
@@ -196,6 +199,11 @@
     }
 
     const { cliente, itens = [] } = pedidoAtualComprovante;
+    const botanicalItems = itens.map((item) => item.produto).filter((produto) => produto && [produto.rega, produto.iluminacao, produto.cuidados, produto.usos].some(Boolean));
+    if (!botanicalItems.length) {
+      showFeedback('Este pedido não possui itens com guia botânico disponível.', true);
+      return;
+    }
     const telefone = normalizeWhatsappPhone(cliente.telefone);
     if (!telefone) {
       showFeedback('O telefone do cliente é inválido para WhatsApp.', true);

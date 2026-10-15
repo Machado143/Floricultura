@@ -26,7 +26,7 @@
       await authService.login(email, senha);
       feedback.textContent = 'Login realizado com sucesso.';
       feedback.classList.add('is-success');
-      window.location.href = '/client/pages/pdv/index.html';
+      window.location.href = '../pdv/index.html';
     } catch (error) {
       feedback.textContent = error.message;
       feedback.classList.add('is-error');

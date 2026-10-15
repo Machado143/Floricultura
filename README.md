@@ -103,13 +103,34 @@ As pastas `client/components`, `client/hooks`, `server/models` e `server/migrati
    Crie um arquivo `.env` na raiz do projeto contendo:
    ```env
    DATABASE_URL="postgresql://usuario:senha@localhost:5432/flora_erp?schema=public"
+   DIRECT_URL="postgresql://usuario:senha@localhost:5432/flora_erp?schema=public"
    PORT=3000
    JWT_SECRET="sua_chave_secreta_aqui"
    ESTOQUE_MINIMO=5
    FRONTEND_URL=
-   ADMIN_PASSWORD="defina-uma-senha-com-pelo-menos-4-caracteres"
+   ADMIN_PASSWORD="defina-uma-senha-com-pelo-menos-8-caracteres"
    ```
    > Substitua `usuario` e `senha` pelas credenciais reais do seu PostgreSQL. Se estiverem incorretas, o Prisma retornará erro **P1000 (Authentication failed)**.
+
+   Se você estiver usando Neon ou Vercel Postgres, também pode exportar as variáveis abaixo no ambiente de deploy. Elas representam as mesmas credenciais, apenas com nomes diferentes para facilitar a integração com a plataforma:
+
+   ```env
+   DATABASE_URL=
+   DATABASE_URL_UNPOOLED=
+   PGHOST=
+   PGHOST_UNPOOLED=
+   PGUSER=
+   PGDATABASE=
+   PGPASSWORD=
+   POSTGRES_URL=
+   POSTGRES_URL_NON_POOLING=
+   POSTGRES_USER=
+   POSTGRES_HOST=
+   POSTGRES_PASSWORD=
+   POSTGRES_DATABASE=
+   POSTGRES_URL_NO_SSL=
+   POSTGRES_PRISMA_URL=
+   ```
 
 5. **Executar as Migrations do Banco:**
    ```bash
@@ -155,7 +176,7 @@ Revise o valor de `DATABASE_URL` no `.env` e valide usuário/senha/host/porta do
 
 ### Seed e segurança
 
-O seed exige `ADMIN_PASSWORD` com pelo menos 4 caracteres e não possui uma senha
+O seed exige `ADMIN_PASSWORD` com pelo menos 8 caracteres e não possui uma senha
 padrão embutida no código:
 
 ```bash
@@ -183,6 +204,8 @@ login, o PDV, a API e o health check do backend.
 - `DATABASE_URL`: conexão pooler usada pelas requisições.
 - `DIRECT_URL`: conexão direta usada pelo Prisma para migrações.
 - `JWT_SECRET`: chave longa e privada usada para assinar os tokens.
+
+Se você estiver provisionando o banco via Neon ou Vercel Postgres, configure também as variáveis de apoio do provedor no ambiente de produção. O Prisma e o deploy podem usar `DATABASE_URL` para a conexão principal e `DIRECT_URL` ou `POSTGRES_URL_NON_POOLING` para rotinas de migração, conforme a configuração do banco.
 
 Depois de configurar as variáveis, faça um novo deploy. As tabelas do banco de
 produção devem ser criadas separadamente, a partir de uma máquina com as mesmas
