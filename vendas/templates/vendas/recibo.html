@@ -1,0 +1,38 @@
+{% extends 'base_interno.html' %}
+
+{% block title %}Recibo{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>Recibo do pedido</h2>
+    <p>Pedido: #{{ pedido.id }}</p>
+    <p>Cliente: {{ pedido.cliente.nome|default:'Consumidor' }}</p>
+    <p>Forma de pagamento: {{ pedido.forma_pagamento }}</p>
+    <p>Status: {{ pedido.status }}</p>
+
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Produto</th>
+                    <th>Qtd</th>
+                    <th>Preço</th>
+                    <th>Subtotal</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in pedido.itens.all %}
+                <tr>
+                    <td>{{ item.planta.nome_popular }}</td>
+                    <td>{{ item.quantidade }}</td>
+                    <td>R$ {{ item.preco_unitario }}</td>
+                    <td>R$ {{ item.subtotal }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <h3 style="margin-top:1rem;">Total: R$ {{ pedido.total }}</h3>
+</div>
+{% endblock %}

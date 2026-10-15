@@ -1,0 +1,81 @@
+{% extends 'base_interno.html' %}
+
+{% block title %}PDV{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>PDV</h2>
+
+    <div class="form-grid" style="margin-bottom:1rem;">
+        <form method="post" style="display:flex; gap:.75rem; align-items:end; flex-wrap:wrap;">
+            {% csrf_token %}
+            <input type="hidden" name="acao" value="adicionar_item" />
+            <div class="field">
+                <label>Planta</label>
+                <select name="planta_id" required>
+                    {% for planta in plantas %}
+                    <option value="{{ planta.id }}">{{ planta.nome_popular }} - R$ {{ planta.preco }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="field">
+                <label>Quantidade</label>
+                <input type="number" name="quantidade" value="1" min="1" />
+            </div>
+            <button type="submit" class="btn btn-primary">Adicionar</button>
+        </form>
+
+        <form method="post" style="display:flex; gap:.75rem; align-items:end; flex-wrap:wrap;">
+            {% csrf_token %}
+            <input type="hidden" name="acao" value="atribuir_cliente" />
+            <div class="field">
+                <label>Cliente</label>
+                <select name="cliente_id">
+                    <option value="">Selecione</option>
+                    {% for cliente in clientes %}
+                    <option value="{{ cliente.id }}" {% if pedido.cliente_id == cliente.id %}selected{% endif %}>{{ cliente.nome }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <button type="submit" class="btn btn-success">Vincular</button>
+        </form>
+    </div>
+
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Produto</th>
+                    <th>Qtd</th>
+                    <th>Preço</th>
+                    <th>Subtotal</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in pedido.itens.all %}
+                <tr>
+                    <td>{{ item.planta.nome_popular }}</td>
+                    <td>{{ item.quantidade }}</td>
+                    <td>R$ {{ item.preco_unitario }}</td>
+                    <td>R$ {{ item.subtotal }}</td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="4">Nenhum item no carrinho.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-top:1rem; flex-wrap:wrap; gap:1rem;">
+        <h3>Total: R$ {{ total }}</h3>
+        <div style="display:flex; gap:.75rem; flex-wrap:wrap;">
+            <form method="post">
+                {% csrf_token %}
+                <input type="hidden" name="acao" value="finalizar" />
+                <button type="submit" class="btn btn-primary">Finalizar</button>
+            </form>
+            <a href="{% url 'cancelar_pedido' pedido.id %}" class="btn btn-warning">Cancelar</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

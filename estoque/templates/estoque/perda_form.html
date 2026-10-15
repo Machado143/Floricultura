@@ -1,0 +1,41 @@
+{% extends 'base_interno.html' %}
+
+{% block title %}Registrar perda{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>Registrar perda de estoque</h2>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-grid">
+            <div class="field">
+                <label>Planta</label>
+                <select name="planta_id" required>
+                    {% for planta in plantas %}
+                    <option value="{{ planta.id }}">{{ planta.nome_popular }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="field">
+                <label>Quantidade</label>
+                <input type="number" name="quantidade" value="1" min="1" />
+            </div>
+            <div class="field">
+                <label>Motivo</label>
+                <select name="motivo">
+                    <option value="MURCHA">Murcha</option>
+                    <option value="QUEBRA">Quebra</option>
+                    <option value="PRAGA">Praga</option>
+                    <option value="VENCIMENTO">Vencimento</option>
+                    <option value="OUTRO">Outro</option>
+                </select>
+            </div>
+            <div class="field" style="grid-column:1/-1;">
+                <label>Observação</label>
+                <textarea name="observacao"></textarea>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary" style="margin-top:1rem;">Salvar perda</button>
+    </form>
+</div>
+{% endblock %}

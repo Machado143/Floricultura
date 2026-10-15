@@ -1,0 +1,34 @@
+{% extends 'base_interno.html' %}
+
+{% block title %}Estoque{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>Estoque</h2>
+    <a href="{% url 'perda_criar' %}" class="btn btn-primary" style="margin-bottom:1rem;">Registrar perda</a>
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Planta</th>
+                    <th>Estoque atual</th>
+                    <th>Estoque mínimo</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for planta in plantas %}
+                <tr>
+                    <td>{{ planta.nome_popular }}</td>
+                    <td>{{ planta.estoque_atual }}</td>
+                    <td>{{ planta.estoque_minimo }}</td>
+                    <td>{% if planta.estoque_atual <= planta.estoque_minimo %}Baixo{% else %}Normal{% endif %}</td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="4">Nenhuma planta em estoque.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

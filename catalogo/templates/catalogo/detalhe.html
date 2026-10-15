@@ -1,0 +1,44 @@
+{% extends 'base_interno.html' %}
+
+{% block title %}{{ planta.nome_popular }}{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>{{ planta.nome_popular }}</h2>
+    <div class="form-grid">
+        <div class="field">
+            <label>Categoria</label>
+            <div>{{ planta.categoria.nome }}</div>
+        </div>
+        <div class="field">
+            <label>Preço</label>
+            <div>R$ {{ planta.preco }}</div>
+        </div>
+        <div class="field">
+            <label>Estoque atual</label>
+            <div>{{ planta.estoque_atual }}</div>
+        </div>
+        <div class="field">
+            <label>Estoque mínimo</label>
+            <div>{{ planta.estoque_minimo }}</div>
+        </div>
+        <div class="field">
+            <label>Temperatura</label>
+            <div>{{ planta.temperatura|default:'-' }}</div>
+        </div>
+        <div class="field">
+            <label>Luminosidade</label>
+            <div>{{ planta.luminosidade|default:'-' }}</div>
+        </div>
+        <div class="field" style="grid-column:1/-1;">
+            <label>Descrição</label>
+            <div>{{ planta.descricao|default:'Sem descrição.' }}</div>
+        </div>
+        <div class="field" style="grid-column:1/-1;">
+            <label>Guia de cuidados</label>
+            <div>{{ planta.guia_cuidados|default:'Sem guia informado.' }}</div>
+        </div>
+    </div>
+    <a href="{% url 'planta_editar' planta.id %}" class="btn btn-primary" style="margin-top:1rem;">Editar</a>
+</div>
+{% endblock %}

@@ -1,0 +1,35 @@
+{% extends 'base_interno.html' %}
+
+{% block title %}Pedido #{{ pedido.id }}{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>Pedido #{{ pedido.id }}</h2>
+    <p>Cliente: {{ pedido.cliente.nome|default:'Consumidor' }}</p>
+    <p>Status: {{ pedido.status }}</p>
+    <p>Total: R$ {{ pedido.total }}</p>
+
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Planta</th>
+                    <th>Quantidade</th>
+                    <th>Preço</th>
+                    <th>Subtotal</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in pedido.itens.all %}
+                <tr>
+                    <td>{{ item.planta.nome_popular }}</td>
+                    <td>{{ item.quantidade }}</td>
+                    <td>R$ {{ item.preco_unitario }}</td>
+                    <td>R$ {{ item.subtotal }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

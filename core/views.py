@@ -75,7 +75,7 @@ def busca_global(request):
 
 @login_required
 def estoque_alertas(request):
-    plantas = Planta.objects.filter(estoque_atual__lte=Planta._meta.get_field("estoque_minimo"))
+    plantas = Planta.objects.filter(estoque_atual__lte=F("estoque_minimo"))
     return render(request, "core/estoque_alertas.html", {"plantas": plantas})
 
 

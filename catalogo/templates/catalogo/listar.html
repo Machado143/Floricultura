@@ -1,0 +1,54 @@
+{% extends 'base_interno.html' %}
+
+{% block title %}Catálogo de plantas{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>Catálogo de plantas</h2>
+    <div style="display:flex; justify-content:space-between; align-items:center; gap:1rem; flex-wrap:wrap; margin-bottom:1rem;">
+        <form method="get" style="display:flex; gap:.75rem; flex-wrap:wrap;">
+            <input type="search" name="q" value="{{ q|default:'' }}" placeholder="Buscar planta" />
+            <select name="categoria">
+                <option value="">Todas as categorias</option>
+                {% for categoria in categorias %}
+                    <option value="{{ categoria.id }}" {% if categoria.id|stringformat:'s' == categoria_id %}selected{% endif %}>{{ categoria.nome }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit" class="btn btn-primary">Filtrar</button>
+        </form>
+        <a href="{% url 'planta_criar' %}" class="btn btn-success">Nova planta</a>
+    </div>
+
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Categoria</th>
+                    <th>Preço</th>
+                    <th>Estoque</th>
+                    <th>Status</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for planta in plantas %}
+                <tr>
+                    <td>{{ planta.nome_popular }}</td>
+                    <td>{{ planta.categoria.nome }}</td>
+                    <td>R$ {{ planta.preco }}</td>
+                    <td>{{ planta.estoque_atual }} / {{ planta.estoque_minimo }}</td>
+                    <td>{% if planta.ativo %}Ativa{% else %}Inativa{% endif %}</td>
+                    <td>
+                        <a href="{% url 'planta_detalhe' planta.id %}">Detalhes</a>
+                        <a href="{% url 'planta_editar' planta.id %}">Editar</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="6">Nenhuma planta cadastrada.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

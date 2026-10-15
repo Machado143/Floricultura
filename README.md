@@ -1,56 +1,87 @@
 # Flor & Cia Floricultura
 
-Loja floral em Django, pronta para deploy na Vercel, com catálogo de produtos em arquivo Python e sem banco de dados em produção.
+Sistema de gestão para floricultura em Django, com vitrine pública, catálogo interno, clientes, PDV, estoque, entregas e autenticação de usuários.
 
-## Como rodar localmente
+## Requisitos
+
+- Python 3.11+
+- Pip
+- PostgreSQL em produção (opcional em desenvolvimento)
+
+## Configuração local
 
 ```bash
-python -m venv venv
+python -m venv .venv
 # Windows
-venv\Scripts\activate
+.venv\Scripts\activate
 # Linux/macOS
-# source venv/bin/activate
+# source .venv/bin/activate
 
 pip install -r requirements.txt
+python manage.py migrate
+python manage.py setup_inicial
 python manage.py runserver
 ```
 
 Acesse: http://localhost:8000/
 
-## Deploy na Vercel
+A conta administrativa padrão criada pelo setup inicial é:
 
-1. Importe este repositório para a Vercel.
-2. Defina a variável de ambiente `SECRET_KEY` no painel da Vercel.
-3. Faça o deploy.
+- usuário: `admin`
+- senha: `admin123` (ou a variável `ADMIN_PASSWORD`)
 
-Exemplo:
+## Variáveis de ambiente
+
+### Desenvolvimento local
+
+```bash
+export SECRET_KEY='sua-chave-secreta'
+export DEBUG='True'
+export ADMIN_PASSWORD='admin123'
+```
+
+### Produção / Vercel
+
+Configure no painel da Vercel:
 
 ```bash
 SECRET_KEY=sua-chave-super-secreta
+DEBUG=False
+ADMIN_PASSWORD=sua-senha-forte
+DATABASE_URL=postgresql://usuario:senha@host:5432/banco
 ```
 
-> A aplicação foi configurada para funcionar sem banco de dados, usando dados em memória em `loja/data.py` e WhiteNoise para arquivos estáticos.
+> Em produção, a aplicação usa `DATABASE_URL` com PostgreSQL. Se a variável não existir, o projeto usa SQLite local.
 
----
+## Comandos úteis
 
-## 📅 Histórico de Entregas por Sprints
+```bash
+python manage.py check
+python manage.py migrate
+python manage.py setup_inicial
+python manage.py shell
+```
 
-### 🟢 Sprint 1: Fundação & Core Operacional
-- Autenticação e permissões de usuários.
-- Catálogo de Produtos e Montagem de Kits em Pedido Único (**RF06 / RN02**).
-- PDV com aplicação de descontos, troco e múltiplos pagamentos.
-- Módulo de Registro de Perdas com Baixa Automática no Estoque (**RF10 / RN01**).
-- Cadastro Unificado de Clientes (**CAIOX-62 / RF07**).
+## Deploy na Vercel
 
-### 🟢 Sprint 2: Gestão Avançada & Pós-venda
-- **CAIOX-95:** Vínculo de cliente ao pedido no PDV e emissão de comprovante/recibo.
-- **CAIOX-96:** Agendamento e gestão de entregas com validação estrita (**RF08 / RN03**).
-- **CAIOX-97:** Ficha Botânica Expandida e Venda Casada (**RF01 / RF03**).
-- **CAIOX-98:** Guia de Cuidados via WhatsApp pós-venda, aberto para confirmação do atendente (**RF05**).
-- **CAIOX-99:** Pesquisa Global, busca web e notificações de estoque zerado/baixo (**RF02 / RF11**).
+1. Faça o import do repositório.
+2. Configure as variáveis de ambiente acima.
+3. Use o arquivo `vercel.json` já preparado para WSGI/Python.
+4. Faça o deploy.
 
----
+O projeto usa WhiteNoise para servir arquivos estáticos em produção.
 
-## 📝 Licença
+## Estrutura principal
 
-Este projeto foi desenvolvido como ERP acadêmico/profissional para a disciplina de Engenharia de Software e Gestão Ágil.
+- `loja/`: vitrine pública
+- `catalogo/`: plantas e categorias
+- `clientes/`: cadastro de clientes
+- `vendas/`: PDV e pedidos
+- `estoque/`: controle e perdas
+- `entregas/`: agendamento e acompanhamento
+- `usuarios/`: perfis e autenticação
+- `core/`: painel, busca e setup inicial
+
+## Licença
+
+Projeto de gestão para floricultura em ambiente acadêmico/profissional.

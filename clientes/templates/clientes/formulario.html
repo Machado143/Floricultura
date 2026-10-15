@@ -1,0 +1,39 @@
+{% extends 'base_interno.html' %}
+
+{% block title %}{% if cliente %}Editar cliente{% else %}Novo cliente{% endif %}{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>{% if cliente %}Editar cliente{% else %}Novo cliente{% endif %}</h2>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-grid">
+            <div class="field">
+                <label>Nome</label>
+                <input type="text" name="nome" value="{{ cliente.nome|default:'' }}" required />
+            </div>
+            <div class="field">
+                <label>Telefone</label>
+                <input type="text" name="telefone" value="{{ cliente.telefone|default:'' }}" required />
+            </div>
+            <div class="field">
+                <label>E-mail</label>
+                <input type="email" name="email" value="{{ cliente.email|default:'' }}" />
+            </div>
+            <div class="field">
+                <label>CPF</label>
+                <input type="text" name="cpf" value="{{ cliente.cpf|default:'' }}" />
+            </div>
+            <div class="field" style="grid-column:1/-1;">
+                <label>Endereço</label>
+                <textarea name="endereco">{{ cliente.endereco|default:'' }}</textarea>
+            </div>
+            <div class="field" style="grid-column:1/-1;">
+                <label>Observações</label>
+                <textarea name="observacoes">{{ cliente.observacoes|default:'' }}</textarea>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary" style="margin-top:1rem;">Salvar</button>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends 'base_interno.html' %}
+
+{% block title %}Entregas{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>Entregas</h2>
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Pedido</th>
+                    <th>Cliente</th>
+                    <th>Data</th>
+                    <th>Status</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for entrega in entregas %}
+                <tr>
+                    <td>#{{ entrega.pedido.id }}</td>
+                    <td>{{ entrega.destinatario }}</td>
+                    <td>{{ entrega.data }}</td>
+                    <td>{{ entrega.status }}</td>
+                    <td>
+                        <form method="post" action="{% url 'atualizar_status' entrega.id %}">
+                            {% csrf_token %}
+                            <select name="status">
+                                {% for choice in entrega.STATUS_CHOICES %}
+                                <option value="{{ choice.0 }}" {% if choice.0 == entrega.status %}selected{% endif %}>{{ choice.1 }}</option>
+                                {% endfor %}
+                            </select>
+                            <button type="submit" class="btn btn-primary">Salvar</button>
+                        </form>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="5">Nenhuma entrega cadastrada.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
