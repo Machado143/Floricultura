@@ -60,17 +60,23 @@ async function update(req, res, next) {
 
     return res.status(200).json({
       success: true,
-      data: await usuarioService.update(req.params.id, { nome, email, senha, role, ativo })
+      data: await usuarioService.update(req.params.id, { nome, email, senha, role, ativo }, req.user.id)
     });
   } catch (error) {
+    if (error.message === 'Você não pode desativar sua própria conta' || error.message === 'Não é possível remover o último administrador ativo') {
+      return res.status(400).json({ success: false, error: error.message });
+    }
     return sendError(res, error) || next(error);
   }
 }
 
 async function remove(req, res, next) {
   try {
-    return res.status(200).json({ success: true, data: await usuarioService.deactivate(req.params.id) });
+    return res.status(200).json({ success: true, data: await usuarioService.deactivate(req.params.id, req.user.id) });
   } catch (error) {
+    if (error.message === 'Você não pode desativar sua própria conta' || error.message === 'Não é possível remover o último administrador ativo') {
+      return res.status(400).json({ success: false, error: error.message });
+    }
     return sendError(res, error) || next(error);
   }
 }

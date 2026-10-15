@@ -1,6 +1,13 @@
 const prisma = require('../config/prisma');
 
 const STATUS_ENTREGA = ['PENDENTE', 'EM_PREPARACAO', 'SAIU_PARA_ENTREGA', 'ENTREGUE', 'CANCELADO'];
+const TRANSICOES_ENTREGA = {
+  PENDENTE: ['EM_PREPARACAO', 'CANCELADO'],
+  EM_PREPARACAO: ['SAIU_PARA_ENTREGA', 'CANCELADO'],
+  SAIU_PARA_ENTREGA: ['ENTREGUE', 'CANCELADO'],
+  ENTREGUE: [],
+  CANCELADO: []
+};
 
 function serializeEntrega(entrega) {
   return entrega;
@@ -29,8 +36,10 @@ async function agendarEntrega(req, res, next) {
     const scheduledDate = /^\d{4}-\d{2}-\d{2}$/.test(dataEntrega || '')
       ? new Date(`${dataEntrega}T12:00:00Z`)
       : null;
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
 
-    if (!clienteId || !dataEntrega || !/^([01]\d|2[0-3]):[0-5]\d$/.test(normalizedTime) || !normalizedAddress || !scheduledDate || Number.isNaN(scheduledDate.getTime())) {
+    if (!clienteId || !dataEntrega || !/^([01]\d|2[0-3]):[0-5]\d$/.test(normalizedTime) || !normalizedAddress || !scheduledDate || Number.isNaN(scheduledDate.getTime()) || scheduledDate < today) {
       return res.status(400).json({ success: false, error: 'RN03: Cliente, endereço, data e horário são obrigatórios e válidos.' });
     }
 
@@ -66,6 +75,11 @@ async function atualizarStatus(req, res, next) {
   try {
     const { status } = req.body;
     if (!STATUS_ENTREGA.includes(status)) return res.status(400).json({ success: false, error: 'Status de entrega inválido.' });
+    const current = await prisma.entrega.findUnique({ where: { id: req.params.id }, select: { id: true, status: true } });
+    if (!current) return res.status(404).json({ success: false, error: 'Entrega não encontrada.' });
+    if (!TRANSICOES_ENTREGA[current.status].includes(status) && current.status !== status) {
+      return res.status(400).json({ success: false, error: `Não é possível ir de ${current.status} para ${status}.` });
+    }
     const entrega = await prisma.entrega.update({ where: { id: req.params.id }, data: { status }, include: { cliente: true, pedido: true } });
     return res.status(200).json({ success: true, data: entrega });
   } catch (error) {

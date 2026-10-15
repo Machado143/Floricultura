@@ -66,4 +66,5 @@
 
   document.querySelector('#refresh-dashboard').addEventListener('click', loadDashboard);
   loadDashboard();
+  window.setInterval(loadDashboard, 60 * 1000);
 })();

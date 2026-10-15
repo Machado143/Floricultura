@@ -352,4 +352,5 @@
   }
 
   Promise.all([initialize(), carregarClientesSelect()]);
+  window.setInterval(initialize, 60 * 1000);
 })();

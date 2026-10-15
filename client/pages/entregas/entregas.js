@@ -7,6 +7,13 @@ document.addEventListener('DOMContentLoaded', () => {
 const getToken = () => (window.authService && authService.getToken()) || localStorage.getItem('token');
 const { escapeHtml } = window.floriculturaUtils;
 const statusLabels = { PENDENTE: 'Pendente', EM_PREPARACAO: 'Em preparação', SAIU_PARA_ENTREGA: 'Saiu para entrega', ENTREGUE: 'Entregue', CANCELADO: 'Cancelado' };
+const allowedTransitions = {
+  PENDENTE: ['EM_PREPARACAO', 'CANCELADO'],
+  EM_PREPARACAO: ['SAIU_PARA_ENTREGA', 'CANCELADO'],
+  SAIU_PARA_ENTREGA: ['ENTREGUE', 'CANCELADO'],
+  ENTREGUE: [],
+  CANCELADO: []
+};
 
 async function request(path, options = {}) {
   const response = await fetch(`/api/v1${path}`, { ...options, headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${getToken()}`, ...(options.headers || {}) } });
@@ -38,7 +45,9 @@ function renderEntregas(entregas) {
   const tabela = document.getElementById('tabelaEntregasBody');
   tabela.innerHTML = entregas.map((entrega) => {
     const date = new Date(entrega.dataEntrega).toLocaleDateString('pt-BR');
-    const statusOptions = Object.entries(statusLabels).map(([value, label]) => `<option value="${value}" ${entrega.status === value ? 'selected' : ''}>${label}</option>`).join('');
+    const statusOptions = Object.entries(statusLabels)
+      .filter(([value]) => value === entrega.status || allowedTransitions[entrega.status].includes(value))
+      .map(([value, label]) => `<option value="${value}" ${entrega.status === value ? 'selected' : ''}>${label}</option>`).join('');
     return `<tr><td data-label="Data / hora">${date} às ${escapeHtml(entrega.horarioEntrega)}</td><td data-label="Cliente"><strong>${escapeHtml(entrega.cliente?.nome)}</strong></td><td data-label="Telefone">${escapeHtml(entrega.cliente?.telefone) || '-'}</td><td data-label="Endereço">${escapeHtml(entrega.endereco)}</td><td data-label="Status"><span class="status-badge status-${entrega.status.toLowerCase()}">${statusLabels[entrega.status] || entrega.status}</span></td><td data-label="Ações"><select class="status-select" data-entrega-id="${escapeHtml(entrega.id)}" aria-label="Atualizar status de ${escapeHtml(entrega.cliente?.nome)}">${statusOptions}</select></td></tr>`;
   }).join('') || '<tr><td colspan="6" class="empty-state">Nenhuma entrega agendada.</td></tr>';
   document.getElementById('delivery-count').textContent = `${entregas.length} ${entregas.length === 1 ? 'entrega' : 'entregas'}`;

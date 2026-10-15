@@ -27,7 +27,7 @@
         <td data-label="E-mail">${escapeHtml(user.email)}</td>
         <td data-label="Perfil"><span class="role-badge role-${user.role.toLowerCase()}">${formatRole(user.role)}</span></td>
         <td data-label="Status"><span class="status-badge">${user.ativo ? 'Ativo' : 'Inativo'}</span></td>
-        <td class="row-actions">${isAdmin ? `<button class="text-button" data-edit="${user.id}" type="button">Editar</button>${user.ativo ? `<button class="text-button danger" data-remove="${user.id}" type="button">Inativar</button>` : ''}` : '<span class="muted-action">Somente leitura</span>'}</td>
+        <td class="row-actions">${isAdmin ? `<button class="text-button" data-edit="${user.id}" type="button">Editar</button>${user.ativo && user.id !== currentUser?.id ? `<button class="text-button danger" data-remove="${user.id}" type="button">Inativar</button>` : ''}` : '<span class="muted-action">Somente leitura</span>'}</td>
       </tr>`).join('');
   }
 
